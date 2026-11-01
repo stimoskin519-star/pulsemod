@@ -1,0 +1,10 @@
+{
+  "key.category.pulsemod.main": "Pulse",
+  "key.pulse.gui": "Open menu",
+  "key.pulse.rec": "Replay: record on/off",
+  "key.pulse.play": "Replay: play on/off",
+  "key.pulse.pause": "Replay: pause",
+  "key.pulse.cam": "Replay: camera on/off",
+  "key.pulse.slower": "Replay: slower",
+  "key.pulse.faster": "Replay: faster"
+}

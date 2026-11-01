@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "pulsemod",
+  "version": "${version}",
+  "name": "Pulse Menu + Replay",
+  "description": "Animated menu and lightweight replay.",
+  "environment": "client",
+  "entrypoints": { "client": ["dev.pulse.PulseMod"] },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
