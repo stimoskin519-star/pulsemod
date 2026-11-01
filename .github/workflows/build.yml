@@ -5,16 +5,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          cp pulse-update/*.java pulsemod-1.21.11/pulsemod/src/main/java/dev/pulse/
-          cp pulse-update/en_us.json pulsemod-1.21.11/pulsemod/src/main/resources/assets/pulsemod/lang/
+      - name: Prepare
+        run: |
+          find . -maxdepth 4 -not -path ‘./.git*’ | head -60
+          PROJ=$(dirname «$(find . -name build.gradle -not -path ‘./.git/*’ | head -1)»)
+          echo «Project: $PROJ»
+          echo «PROJ=$PROJ» >> «$GITHUB_ENV»
+          mkdir -p «$PROJ/src/main/java/dev/pulse» «$PROJ/src/main/resources/assets/pulsemod/lang»
+          cp pulse-update/*.java «$PROJ/src/main/java/dev/pulse/«
+          cp pulse-update/en_us.json «$PROJ/src/main/resources/assets/pulsemod/lang/«
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: 9.2.1 }
       - run: gradle build
-        working-directory: pulsemod-1.21.11/pulsemod
+        working-directory: ${{ env.PROJ }}
       - uses: actions/upload-artifact@v4
         with:
           name: pulsemod-jar
-          path: pulsemod-1.21.11/pulsemod/build/libs/pulsemod-1.0.0.jar
+          path: ${{ env.PROJ }}/build/libs/pulsemod-1.0.0.jar
