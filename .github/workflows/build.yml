@@ -5,6 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: |
+          cp pulse-update/*.java pulsemod-1.21.11/pulsemod/src/main/java/dev/pulse/
+          cp pulse-update/en_us.json pulsemod-1.21.11/pulsemod/src/main/resources/assets/pulsemod/lang/
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
       - uses: gradle/actions/setup-gradle@v4
