@@ -1,0 +1,40 @@
+name: build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build
+        run: |
+          F=$(find . -name build.gradle -not -path './.git/*' | head -n1)
+          if [ -z "$F" ]; then
+            echo "build.gradle не найден. Структура репозитория:"
+            find . -not -path './.git/*' | head -n 60
+            exit 1
+          fi
+          cd "$(dirname "$F")"
+
+          if ! git clone --depth 1 --branch 1.21.11 https://github.com/FabricMC/fabric-example-mod.git /tmp/tpl; then
+            echo "Ветка 1.21.11 не найдена. Доступные ветки:"
+            git ls-remote --heads https://github.com/FabricMC/fabric-example-mod.git
+            exit 1
+          fi
+          cp -r /tmp/tpl/gradle ./
+          cp /tmp/tpl/gradlew ./gradlew
+          chmod +x gradlew
+          cp /tmp/tpl/gradle.properties ./gradle.properties
+          sed -i 's/^mod_version=.*/mod_version=1.0.0/; s/^maven_group=.*/maven_group=com.rmenu/; s/^archives_base_name=.*/archives_base_name=rmenu/' gradle.properties
+          echo "===== gradle.properties ====="
+          cat gradle.properties
+          echo "============================="
+          ./gradlew build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rmenu
+          path: '**/build/libs/*.jar'
