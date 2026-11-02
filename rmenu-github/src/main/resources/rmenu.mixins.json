@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "com.rmenu.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["CameraMixin", "EntityMixin"],
+  "injectors": { "defaultRequire": 1 }
+}
